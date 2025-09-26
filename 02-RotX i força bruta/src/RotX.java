@@ -11,6 +11,7 @@ Scanner prova = new Scanner(System.in);
         String xifrat = "";
         String desxifrat = " ";
 
+
         System.out.println("Introdueix un text per xifrar:");
         text = prova.nextLine();
 
@@ -22,8 +23,19 @@ Scanner prova = new Scanner(System.in);
 
 }
 
+public static String xifraRotX(String cadena, int desplaçament) {
+
+int movements = desplaçament;
+cadena = " ";
+
+while (movements < minusculas.length) {
 
 
 }
+
+
+}
+
+
 
 
