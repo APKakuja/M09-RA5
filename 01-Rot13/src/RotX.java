@@ -10,9 +10,46 @@ public class RotX {
         String text;
         String xifrat;
         String desxifrat;
+        String[] ejemplos = {
+                "ABC",
+                "XYZ",
+                "Hola, Mr. calçot",
+                "Perdó, per tu què és?"
+        };
 
-        // Demanem el text
-        System.out.println("Introdueix un text per xifrar:");
+        //Desplazamientos per casos de proba automatic, tal com s'indica al anunciat
+        int[] desplazamientos = {0, 2, 4, 6};
+
+
+        System.out.println("Xifrat");
+        System.out.println("------");
+        for (int i = 0; i < ejemplos.length; i++) {
+            text = ejemplos[i];
+            int d = desplazamientos[i];
+            xifrat = xifraRotX(text, d);
+            System.out.println("(" + d + ")-" + text + " => " + xifrat);
+        }
+
+        System.out.println("Desxifrat");
+        System.out.println("---------");
+        for (int i = 0; i < ejemplos.length; i++) {
+            xifrat = xifraRotX(ejemplos[i], desplazamientos[i]);
+            desxifrat = desxifraRotX(xifrat, desplazamientos[i]);
+            System.out.println("(" + desplazamientos[i] + ")-" + xifrat + " => " + desxifrat);
+        }
+
+        xifrat = xifraRotX("Perdó, per tu què és?", 6);
+        System.out.println("\nMissatge xifrat: " + xifrat);
+        System.out.println("----------------");
+
+        //Utilitza el array minusculas per els numeros de desplazament totals
+        for (int g = 0; g < minusculas.length; g++) {
+            desxifrat = desxifraRotX(xifrat, g);
+            System.out.println("(" + g + ")->" + desxifrat);
+        }
+
+        // Demanem casos de prova
+        System.out.println("\nIntrodueix un text per xifrar:");
         text = prova.nextLine();
 
         // Demanem el desplazamiento
