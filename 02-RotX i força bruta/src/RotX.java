@@ -58,11 +58,11 @@ public class RotX {
 
         // Xifra el text
         xifrat = xifraRotX(text, desplazamiento);
-        System.out.println("\nText cifrat: " + xifrat);
+        System.out.println("\nText xifrat: " + xifrat);
 
         // Desxifra el text
         desxifrat = desxifraRotX(xifrat, desplazamiento);
-        System.out.println("Text descifrat: " + desxifrat);
+        System.out.println("Text desxifrat: " + desxifrat);
 
         // Probem la força brutax
         System.out.println("\nForça bruta:");
