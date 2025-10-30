@@ -78,7 +78,6 @@ public class Polialfabetic {
         return resultat.toString();
     }
 
-    // 🔹 Desxifra el text
     public static String desxifraPoliAlfa(String cadena, String msg) {
         StringBuilder resultat = new StringBuilder();
 
