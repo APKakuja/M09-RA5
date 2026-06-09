@@ -8,14 +8,10 @@ public class Hashes {
 
     public int npass = 0;
 
-    // Charset que incluye minúsculas, mayúsculas, números y símbolo !
     private static final char[] CHARSET = "abcdefABCDEF1234567890!".toCharArray();
 
-    // Longitud fija de 6 (el objetivo es aaabF!)
-    private static final int MIN_LEN = 6;
+    private static final int MIN_LEN = 1;
     private static final int MAX_LEN = 6;
-
-    // ---------- Hashing ----------
 
     public String getSHA512AmbSalt(String pw, String salt) {
         try {
@@ -31,7 +27,7 @@ public class Hashes {
     public String getPBKDF2AmbSalt(String pw, String salt) {
         try {
             int iterations = 20_000;
-            int keyLenBits = 128; // 16 bytes => 32 hex
+            int keyLenBits = 128; 
             PBEKeySpec spec = new PBEKeySpec(pw.toCharArray(), salt.getBytes(), iterations, keyLenBits);
             SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             byte[] bytes = skf.generateSecret(spec).getEncoded();
@@ -43,42 +39,43 @@ public class Hashes {
     }
 
     public String forcaBruta(String alg, String hashObjectiu, String salt) {
-        npass = 0; // reinicia el contador por cada algoritmo
-
-       
+        npass = 0;
         for (int len = MIN_LEN; len <= MAX_LEN; len++) {
-            char[] candidate = new char[len];
-            if (cercaRecursiva(alg, hashObjectiu, salt, candidate, 0)) {
-                return new String(candidate);
+            int charsetLen = CHARSET.length;
+            int[] indices = new int[len]; 
+
+            boolean done = false;
+            while (!done) {
+                char[] candidate = new char[len];
+                for (int i = 0; i < len; i++) candidate[i] = CHARSET[indices[i]];
+
+                String pw = new String(candidate);
+                npass++;
+
+                String hashGenerat = switch (alg) {
+                    case "SHA-512" -> getSHA512AmbSalt(pw, salt);
+                    case "PBKDF2" -> getPBKDF2AmbSalt(pw, salt);
+                    default -> throw new IllegalArgumentException("Algorisme no suportat: " + alg);
+                };
+
+                if (hashGenerat.equals(hashObjectiu)) return pw;
+
+                int pos = len - 1;
+                while (pos >= 0) {
+                    if (indices[pos] < charsetLen - 1) {
+                        indices[pos]++;
+                        break;
+                    } else {
+                        indices[pos] = 0;
+                        pos--;
+                    }
+                }
+                if (pos < 0) done = true; 
             }
         }
         return null;
     }
 
-    private boolean cercaRecursiva(String alg, String hashObjectiu, String salt, char[] candidate, int pos) {
-        if (pos == candidate.length) {
-            String pw = new String(candidate);
-            npass++;
-
-            String hashGenerat = switch (alg) {
-                case "SHA-512" -> getSHA512AmbSalt(pw, salt);
-                case "PBKDF2" -> getPBKDF2AmbSalt(pw, salt);
-                default -> throw new IllegalArgumentException("Algorisme no suportat: " + alg);
-            };
-
-            return hashGenerat.equals(hashObjectiu);
-        }
-
-        for (char c : CHARSET) {
-            candidate[pos] = c;
-            if (cercaRecursiva(alg, hashObjectiu, salt, candidate, pos + 1)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // ---------- Format de temps ----------
 
     public String getInterval(long t1, long t2) {
         long ms = Math.max(0, t2 - t1);
@@ -89,8 +86,6 @@ public class Hashes {
         return String.format("%d dies / %d hores / %d minuts / %d segons / %d millis",
                 dies, hores, minuts, segons, ms);
     }
-
-    // ---------- Main ----------
 
     public static void main(String[] args) throws Exception {
         String salt = "qpoweiurafslkdfjz";
@@ -106,10 +101,8 @@ public class Hashes {
         String[] algoritmes = { "SHA-512", "PBKDF2" };
 
         for (int i = 0; i < alashes.length; i++) {
-            System.out.print("==================================\n");
             System.out.printf("Algorisme: %s\n", algoritmes[i]);
             System.out.printf("Hash: %s\n", alashes[i]);
-            System.out.print("\n");
             System.out.printf("--- Inici de força bruta ---\n");
 
             long t1 = System.currentTimeMillis();
@@ -119,7 +112,6 @@ public class Hashes {
             System.out.printf("Pass : %s\n", pwTrobat);
             System.out.printf("Provats: %d\n", h.npass);
             System.out.printf("Temps : %s\n", h.getInterval(t1, t2));
-            System.out.print("==================================\n\n");
         }
     }
 }
