@@ -1,12 +1,10 @@
-import java.util.Scanner;
 
 public class RotX {
  
-    static char[] majuscules = "AÀÁBCÇDEÉÈFGHIÍÏJKLMNÑOÒÓPQRSTUÚÜVWXYZ".toCharArray();
-    static char[] minuscules = "aàábcçdeéèfghiíïjklmnñoòópqrstuúüvwxyz".toCharArray();
+    static char[] majuscules = "AÁÀBCÇDEÉÈFGHIÍÌÏJKLMNÑOÓÒPQRSTUÚÙÜVWXYZ".toCharArray();
+    static char[] minuscules = "aáàbcçdeéèfghiíìïjklmnñoóòpqrstuúùüvwxyz".toCharArray();
 
     public static void main(String[] args) {
-        Scanner prova = new Scanner(System.in);
         String text;
         String xifrat;
         String desxifrat;
@@ -33,7 +31,7 @@ public class RotX {
 
         System.out.println("Desxifrat");
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < ejemplos.length; i++) {
             xifrat = xifraRotX(ejemplos[i], desplazamientos[i]);
             desxifrat = desxifraRotX(xifrat, desplazamientos[i]);
 
@@ -48,6 +46,9 @@ public class RotX {
             desxifrat = desxifraRotX(xifrat, g);
             System.out.println("(" + g + ")->" + desxifrat);
         }
+
+         System.out.println("Força bruta:");
+         forcaBrutaRotX(xifrat);
     }
 
      public static String xifraRotX(String text, int desplazamiento) {
@@ -111,7 +112,7 @@ public class RotX {
      }
      
       public static void forcaBrutaRotX(String text) {
-        for (int d = 1; d <= minuscules.length; d++) {
+        for (int d = 0; d < minuscules.length; d++) {
             String intento = desxifraRotX(text, d);
             System.out.println("(" + d + ") -> " + intento);
         }
