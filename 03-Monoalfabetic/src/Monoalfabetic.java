@@ -10,11 +10,31 @@ public class Monoalfabetic {
     private static char[] permutacio;
 
 
-    private static void main(String[] args) {
-
+    public static void main(String[] args) {
         permutacio = permutaAlfabet(alfabet);
 
-        
+        System.out.println("Alfabet original: " + String.valueOf(alfabet));
+        System.out.println("Alfabet permutat: " + String.valueOf(permutacio));
+
+        String[] exemples = {
+
+            "Test 01 àrbitre, coixí, Perímetre",
+            "Test 02 Taüll, DÍA, año",
+            "Test 03 Peça, Òrrius, Bòvila"
+
+        };
+
+        for (String text : exemples) {
+            String xifrat = xifraMonoAlfa(text);
+            String desxifrat = desxifraMonoAlfa(xifrat);
+
+            System.out.println("Xifratge:");
+            System.out.println(text + " --> " + xifrat);
+            System.out.println(" ");
+            System.out.println("Desxifratge:");
+            System.out.println(xifrat + " --> " + desxifrat);
+            System.out.println(" ");
+        }
     }
 
     static char[] permutaAlfabet(char[] alfabet) {
@@ -63,7 +83,12 @@ public class Monoalfabetic {
     }
 
     public static String desxifraMonoAlfa(String cadena) {
+        StringBuilder resultat = new StringBuilder();
 
-        return;
+        for (char c : cadena.toCharArray()) {
+            resultat.append(substitueix(c, permutacio, alfabet));
+        }
+
+        return resultat.toString();
     }
 }
