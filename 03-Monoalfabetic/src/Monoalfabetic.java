@@ -15,6 +15,7 @@ public class Monoalfabetic {
 
         System.out.println("Alfabet original: " + String.valueOf(alfabet));
         System.out.println("Alfabet permutat: " + String.valueOf(permutacio));
+        System.out.println(" ");
 
         String[] exemples = {
 
@@ -24,17 +25,29 @@ public class Monoalfabetic {
 
         };
 
+        System.out.println("Xifratge:");
+        System.out.println(" ");
+
         for (String text : exemples) {
             String xifrat = xifraMonoAlfa(text);
-            String desxifrat = desxifraMonoAlfa(xifrat);
-
-            System.out.println("Xifratge:");
             System.out.println(text + " --> " + xifrat);
             System.out.println(" ");
-            System.out.println("Desxifratge:");
+
+        }
+
+        System.out.println(" ");
+        System.out.println("Desxifratge:");
+        System.out.println(" ");
+
+        for (String text : exemples) {
+
+            String xifrat = xifraMonoAlfa(text);
+            String desxifrat = desxifraMonoAlfa(xifrat);
             System.out.println(xifrat + " --> " + desxifrat);
             System.out.println(" ");
+
         }
+        
     }
 
     static char[] permutaAlfabet(char[] alfabet) {
