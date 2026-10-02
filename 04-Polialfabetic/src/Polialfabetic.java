@@ -1,4 +1,3 @@
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,18 +7,14 @@ public class Polialfabetic {
 
     static char[] alfabet = "AÀÁBCÇDEÈÉFGHIÍÏJKLMNÑOÒÓPQRSTUÚÜVWXYZ".toCharArray();
 
-    private static Long clauSecreta;
-    static Random rand = new SecureRandom();
+    private static char[] permutacio;
+    
+    private static Random aleatori;
 
-    public static String getLlavor(long lenght) {
-        assert lenght >= 4;
-        char[] llavor = new char[(int) lenght];
+    private static long clauSecreta = 12345;
 
-        for (int i=4; i<lenght; i++) {
-            llavor[i] = alfabet[rand.nextInt(alfabet.length)];
-        }
-
-        return new String(llavor);
+    private static void initRandom(long clauSecreta) {
+        aleatori = new Random(clauSecreta);
     }
 
     public static void main(String[] args) {
@@ -33,7 +28,7 @@ public class Polialfabetic {
         System.out.println("Xifratge:\n-----");
         for (int i = 0; i < msgs.length; i++) {
 
-            getLlavor(clauSecreta);
+            initRandom(clauSecreta);
             msgsXifrats[i] = xifraPoliAlfa(msgs[i]);
             System.out.printf("%-34S -> %s%n", msgs[i], msgsXifrats[i]);
         }
@@ -46,34 +41,59 @@ public class Polialfabetic {
 
         List<Character> lletres = new ArrayList<>();
 
-        for (char c : alfabet  ) {
-            lletres.add(c);
-        }
-        Collections.shuffle(lletres);
-
-        char[] resultat = new char[alfabet.length];
-        for (int i = 0; i < alfabet.length; i++) {
-            resultat[i] = lletres.get(i);
+        for (char lletra : alfabet) {
+             lletres.add(lletra);
         }
 
+        Collections.shuffle(lletres, aleatori);
+        permutacio = new char[alfabet.length];
+
+        for (int i = 0; i < lletres.size(); i++) {
+            permutacio[i] = lletres.get(i);
+        }
     }
 
-    public static char[] getAlfabet() {
-        return alfabet;
+
+    private static int buscaPosicio(char[] array, char lletra) {
+        for (int i = 0; i < array.length; i++) {
+
+            if (array[i] == lletra) {
+                return i;
+            }
+            
+        }
+
+        return -1;
     }
 
-    public static void setAlfabet(char[] alfabet) {
-        Polialfabetic.alfabet = alfabet;
-    }
 
     public static String xifraPoliAlfa(String msg) {
 
+        StringBuilder resultat = new StringBuilder();
 
+        for (int i = 0; i < msg.length(); i++) {
+
+            char caracterOriginal = msg.charAt(i);
+
+            char lletraMajuscula = Character.toUpperCase(caracterOriginal);
+
+            int posicio = buscaPosicio(alfabet, lletraMajuscula);
+
+            if (posicio != -1) {
+
+                permutaAlfabet();
+
+                resultat.append(caracterOriginal);
+            }
+        }
+
+         return resultat.toString();
 
     }
 
     public static String desxifraPoliAlfa(String msg) {
+            
+        }
 
 
-    }
 }
