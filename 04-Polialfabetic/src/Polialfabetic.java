@@ -35,6 +35,12 @@ public class Polialfabetic {
 
         System.out.println("Desxifratge:\n-----");
         
+        for (int i = 0; i < msgsXifrats.length; i++) {
+
+            initRandom(clauSecreta);
+            String desxifrat = desxifraPoliAlfa(msgsXifrats[i]);
+            System.out.printf("%-34s -> %s%n",msgsXifrats[i],desxifrat);
+        }
     }
 
     public static void permutaAlfabet() {
@@ -75,6 +81,8 @@ public class Polialfabetic {
 
             char caracterOriginal = msg.charAt(i);
 
+            boolean esMinuscula = Character.isLowerCase(caracterOriginal);
+
             char lletraMajuscula = Character.toUpperCase(caracterOriginal);
 
             int posicio = buscaPosicio(alfabet, lletraMajuscula);
@@ -83,6 +91,14 @@ public class Polialfabetic {
 
                 permutaAlfabet();
 
+                char lletraXifrada = permutacio[posicio];
+
+                if (esMinuscula) {
+                    lletraXifrada = Character.toLowerCase(lletraXifrada);
+                }
+
+                resultat.append(lletraXifrada);
+            } else {
                 resultat.append(caracterOriginal);
             }
         }
@@ -92,8 +108,36 @@ public class Polialfabetic {
     }
 
     public static String desxifraPoliAlfa(String msg) {
-            
-        }
 
+        StringBuilder resultat = new StringBuilder();
+
+        for (int i = 0; i < msg.length(); i++) { 
+
+            char caracter = msg.charAt(i);
+
+            boolean esMinuscula = Character.isLowerCase(caracter);
+
+            char lletraMajuscula = Character.toUpperCase(caracter);
+
+            int comprovacio = buscaPosicio(alfabet, lletraMajuscula);
+
+            if (comprovacio != -1) {
+                permutaAlfabet();
+
+                int posicio = buscaPosicio(permutacio, lletraMajuscula);
+
+                char lletraOriginal = alfabet[posicio];
+
+                if (esMinuscula) {
+                    lletraOriginal = Character.toLowerCase(lletraOriginal);
+                }
+
+                resultat.append(lletraOriginal);
+            } else {
+                resultat.append(caracter);
+            }
+        }
+            return resultat.toString();
+    }
 
 }
