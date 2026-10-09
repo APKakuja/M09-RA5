@@ -15,7 +15,6 @@ public class AES {
     private static byte[] iv = new byte[MIDA_IV];
     private static final String CLAU = "StringsForSpring";
 
-
     public static void main(String[] args) {
         String msgs[] = {
             "Lorem ipsum dicet",
@@ -73,13 +72,9 @@ public class AES {
 
     public static String desxifraAES(byte[] bIvIMsgXifrat, String clau) throws Exception {
         
-        // Extreu L'IV
-
         for (int i= 0; i < MIDA_IV; i++) {
             iv[i] = bIvIMsgXifrat[i];
         }
-
-        // Extreu la part xifrada
         
         IvParameterSpec ivSpec = new IvParameterSpec(iv);
 
@@ -89,10 +84,15 @@ public class AES {
             xifrat[i] = bIvIMsgXifrat[MIDA_IV + i];
         }
 
-        // Fer hash de la clau
+        MessageDigest md = MessageDigest.getInstance(ALGORISME_HASH);
+        byte[] keyBytes = md.digest(clau.getBytes("UTF-8"));
+        SecretKeySpec keySpec = new SecretKeySpec(keyBytes, ALGORISME_XIFRAT);
 
-        // Desxifrar
+        Cipher cipher = Cipher.getInstance(FORMAT_AES);
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+        byte[] decBytes = cipher.doFinal(xifrat);
 
-        // return String desxifrat
+        return new String(decBytes, "UTF-8");
+
     }
 }
