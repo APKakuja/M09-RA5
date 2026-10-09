@@ -1,6 +1,9 @@
 
+import java.security.MessageDigest;
 import java.security.SecureRandom;
-import java.security.SecureRandomParameters;
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class AES {
     
@@ -18,7 +21,7 @@ public class AES {
             "Lorem ipsum dicet",
             "Hola Andrés cómo está tu cuñado",
             "Agora ïlla Ôtto"
-     };
+        };
 
      for (int i = 0; i < msgs.length; i++) {
         String msg = msgs[i];
@@ -39,20 +42,52 @@ public class AES {
      }
     }
 
-    public static byte[] xifraAES(String msg, String clau)
-    throws Exception {
+    public static byte[] xifraAES(String msg, String clau) throws Exception {
+        byte[] dades = msg.getBytes("UTF-8");
 
-        SecureRandom randomSecureRandom = SecureRandom.getInstance("");
-        byte[] iv = new byte[];
+        SecureRandom rnd = new SecureRandom();
+        rnd.nextBytes(iv);
+        IvParameterSpec ivSpec = new IvParameterSpec(iv);
+    
+        MessageDigest md = MessageDigest.getInstance(ALGORISME_HASH);
+        byte[] keyBytes = md.digest(clau.getBytes("UTF-8"));
+        SecretKeySpec keySpec = new SecretKeySpec(keyBytes, ALGORISME_XIFRAT);
 
+        Cipher cipher = Cipher.getInstance(FORMAT_AES);
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
+        byte[] xifrat = cipher.doFinal(dades);
+
+        int totalLen = iv.length + xifrat.length;
+        byte[] resultat = new byte[totalLen];
+
+        for (int i = 0; i < iv.length; i++) {
+            resultat[i] = iv[i];
+        }
+
+        for (int i = 0; i < xifrat.length; i++) {
+            resultat[iv.length + i] = xifrat[i];
+        }
+
+        return resultat;
     }
 
     public static String desxifraAES(byte[] bIvIMsgXifrat, String clau) throws Exception {
-        return clau;
         
         // Extreu L'IV
 
+        for (int i= 0; i < MIDA_IV; i++) {
+            iv[i] = bIvIMsgXifrat[i];
+        }
+
         // Extreu la part xifrada
+        
+        IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+        int xifratLen = bIvIMsgXifrat.length - MIDA_IV;
+        byte[] xifrat = new byte[xifratLen];
+        for (int i = 0; i < xifratLen; i++) {
+            xifrat[i] = bIvIMsgXifrat[MIDA_IV + i];
+        }
 
         // Fer hash de la clau
 
