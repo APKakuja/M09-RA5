@@ -1,9 +1,33 @@
 package iticbcn.xifratge;
 
-public class XifradorRotX {
+public class XifradorRotX implements Xifrador {
  
     static char[] majuscules = "AÁÀBCÇDEÉÈFGHIÍÌÏJKLMNÑOÓÒPQRSTUÚÙÜVWXYZ".toCharArray();
     static char[] minuscules = "aáàbcçdeéèfghiíìïjklmnñoóòpqrstuúùüvwxyz".toCharArray();
+
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        int desplacament = converteixClau(clau);
+        return new TextXifrat(xifraRotX(msg, desplacament).getBytes());
+    }
+
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        int desplacament = converteixClau(clau);
+        return desxifraRotX(new String(xifrat.getBytes()), desplacament);
+    }
+
+    private int converteixClau(String clau) throws ClauNoSuportada {
+        try {
+            int desplacament = Integer.parseInt(clau);
+            if (desplacament < 0 || desplacament > 40) {
+                throw new NumberFormatException();
+            }
+            return desplacament;
+        } catch (Exception e) {
+            throw new ClauNoSuportada("La clau de RotX ha de ser un nombre enter de 0 a 40");
+        }
+    }
 
     public void main(String[] args) {
         String text;

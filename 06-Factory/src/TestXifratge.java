@@ -1,3 +1,12 @@
+import iticbcn.xifratge.AlgorismeAES;
+import iticbcn.xifratge.AlgorismeFactory;
+import iticbcn.xifratge.AlgorismeMonoalfabetic;
+import iticbcn.xifratge.AlgorismePolialfabetic;
+import iticbcn.xifratge.AlgorismeRotX;
+import iticbcn.xifratge.ClauNoSuportada;
+import iticbcn.xifratge.TextXifrat;
+import iticbcn.xifratge.Xifrador;
+
 public class TestXifratge {
     public static void main(String[] args) {
         AlgorismeFactory[] aFactory = { new AlgorismeAES(), new AlgorismeMonoalfabetic(), new AlgorismePolialfabetic(), new AlgorismeRotX() };

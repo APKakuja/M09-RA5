@@ -6,7 +6,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class XifradorAES {
+public class XifradorAES implements Xifrador {
     
     public static final String ALGORISME_XIFRAT = "AES";
     public static final String ALGORISME_HASH = "SHA-256";
@@ -15,6 +15,25 @@ public class XifradorAES {
     private static final int MIDA_IV = 16;
     private static byte[] iv = new byte[MIDA_IV];
     private static final String CLAU = "StringsForSpring";
+
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        try {
+            return new TextXifrat(xifraAES(msg, clau));
+        } catch (Exception e) {
+            System.err.println("Error de xifrat: " + e.getLocalizedMessage());
+            throw new ClauNoSuportada("No s'ha pogut xifrar el missatge: " + e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        try {
+            return desxifraAES(xifrat.getBytes(), clau);
+        } catch (Exception e) {
+            throw new ClauNoSuportada("No s'ha pogut desxifrar el missatge: " + e.getLocalizedMessage());
+        }
+    }
 
     public void main(String[] args) {
         String msgs[] = {

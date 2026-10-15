@@ -4,12 +4,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class XifradorMonoalfabetic {
+public class XifradorMonoalfabetic implements Xifrador {
 
 
     static char[] alfabet = "AÀÁBCÇDEÈÉFGHIÍÏJKLMNÑOÒÓPQRSTUÚÜVWXYZ".toCharArray();
 
     private static char[] permutacio;
+
+    public XifradorMonoalfabetic() {
+        permutacio = permutaAlfabet(alfabet);
+    }
+
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        comprovaClau(clau);
+        return new TextXifrat(xifraMonoAlfa(msg).getBytes());
+    }
+
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        comprovaClau(clau);
+        return desxifraMonoAlfa(new String(xifrat.getBytes()));
+    }
+
+    private void comprovaClau(String clau) throws ClauNoSuportada {
+        if (clau != null) {
+            throw new ClauNoSuportada("Xifrador monoalfabètic no suporta clau != null");
+        }
+    }
 
 
     public void main(String[] args) {
