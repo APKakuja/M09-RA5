@@ -25,9 +25,9 @@ public class Main {
         String strClauPriv = DatatypeConverter.printHexBinary(parellClaus.getPrivate().getEncoded());
 
         System.out.println("===========================");
-        System.out.println("Clau pública" + strClauPub);
+        System.out.println("Clau pública: " + strClauPub);
         System.out.println("===========================");
-        System.out.println("Clau pública" + strClauPriv);
+        System.out.println("Clau privada: " + strClauPriv);
 
 
     }
