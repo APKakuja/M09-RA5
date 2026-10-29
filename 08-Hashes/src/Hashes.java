@@ -29,7 +29,7 @@ public class Hashes {
     public String getPBKDF2AmbSalt(String pw, String salt) {
         try {
             String hash;
-            int iterations = 20_000;
+            int iterations = 100;
             int keyLenBits = 128; 
             PBEKeySpec spec = new PBEKeySpec(pw.toCharArray(), salt.getBytes(), iterations, keyLenBits);
             SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
@@ -45,7 +45,7 @@ public class Hashes {
     public String forcaBruta(String alg, String hash, String salt) {
 
         npass = 0;
-        for (int len = MIN_LEN; len < MAX_LEN; len++){
+        for (int len = MIN_LEN; len <= MAX_LEN; len++){
             int charsetLen = CHARSET.length;
              int[] indices = new int[len]; 
 
@@ -90,7 +90,7 @@ public class Hashes {
         long hores = ms / (60L * 60 * 1000); ms %= (60L * 60 * 1000);
         long minuts = ms / (60L * 1000); ms %= (60L * 1000);
         long segons = ms / (1000); ms %= (1000);
-        return String.format(" ", dies, hores, minuts, segons, ms);
+        return String.format("%d dies / %d hores / %d minuts / %d segons / %d ms ", dies, hores, minuts, segons, ms);
     }
 
     public static void main(String[] args) throws Exception {
