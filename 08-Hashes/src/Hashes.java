@@ -43,10 +43,54 @@ public class Hashes {
     }
 
     public String forcaBruta(String alg, String hash, String salt) {
+
+        npass = 0;
+        for (int len = MIN_LEN; len < MAX_LEN; len++){
+            int charsetLen = CHARSET.length;
+             int[] indices = new int[len]; 
+
+             boolean done = false;
+             while (!done) {
+                char[] candidate = new char[len];
+                for (int i = 0; i < len; i++) candidate[i] = CHARSET[indices[i]];
+
+                String pw = new String(candidate);
+                npass++;
+
+                 String hashGenerat = switch (alg) {
+                    case "SHA-512" -> getSHA512AmbSalt(pw, salt);
+                    case "PBKDF2" -> getPBKDF2AmbSalt(pw, salt);
+                    default -> throw new IllegalArgumentException("Algorisme no suportat: " + alg);
+                };
+
+                if (hashGenerat.equals(hash)) return pw;
+
+                int pos = len - 1;
+                while(pos>=0){
+                    if (indices[pos] < charsetLen - 1) {
+                        indices[pos]++;
+                        break;
+                    } else {
+                        indices[pos] = 0;
+                        pos--;
+                    }
+                }
+                if (pos < 0) done = true;
+             }
+
+        }
+        return null;
+
     }
 
 
     public String getInterval(long t1, long t2) {
+        long ms = Math.max(0, t2 - t1);
+        long dies = ms / (24L * 60 * 60 * 1000); ms %= (24L * 60 * 60 * 1000);
+        long hores = ms / (60L * 60 * 1000); ms %= (60L * 60 * 1000);
+        long minuts = ms / (60L * 1000); ms %= (60L * 1000);
+        long segons = ms / (1000); ms %= (1000);
+        return String.format(" ", dies, hores, minuts, segons, ms);
     }
 
     public static void main(String[] args) throws Exception {
