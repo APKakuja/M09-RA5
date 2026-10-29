@@ -15,10 +15,12 @@ public class Hashes {
 
     public String getSHA512AmbSalt(String pw, String salt) {
         try {
+            String hash;
             MessageDigest md = MessageDigest.getInstance("SHA-512");
             byte[] bytes = md.digest((salt + pw).getBytes());
             HexFormat hex = HexFormat.of();
-            return hex.formatHex(bytes);
+            hash = hex.formatHex(bytes);
+            return hash;
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("SHA-512 no disponible", e);
         }
@@ -26,19 +28,21 @@ public class Hashes {
 
     public String getPBKDF2AmbSalt(String pw, String salt) {
         try {
+            String hash;
             int iterations = 20_000;
             int keyLenBits = 128; 
             PBEKeySpec spec = new PBEKeySpec(pw.toCharArray(), salt.getBytes(), iterations, keyLenBits);
             SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             byte[] bytes = skf.generateSecret(spec).getEncoded();
             HexFormat hex = HexFormat.of();
-            return hex.formatHex(bytes);
+            hash = hex.formatHex(bytes);
+            return hash;
         } catch (Exception e) {
             throw new RuntimeException("Error en PBKDF2", e);
         }
     }
 
-    public String forcaBruta(String alg, String hashObjectiu, String salt) {
+    public String forcaBruta(String alg, String hash, String salt) {
     }
 
 
