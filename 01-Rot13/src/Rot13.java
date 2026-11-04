@@ -1,4 +1,3 @@
-import java.util.Scanner;
 
 public class Rot13 {
 
@@ -7,17 +6,27 @@ public class Rot13 {
 
     public static void main(String[] args) {
 
-        Scanner paraula = new Scanner(System.in);
-        String text = "";
-        String textXifrat = "";
-        String textDesxifrat = "";
+        String[] textos = {
+            "ABC",
+            "XYZ",
+            "Hola, Mr. calçot",
+            "Perdó, per tu què és?"
+        };
 
-        System.out.println("Introdueix text per xifrar");
-        text = paraula.nextLine();
-        textXifrat = xifraRot13(text);
-        System.out.println(textXifrat + " text cifrat");
-        textDesxifrat = desxifraRot13(textXifrat);
-        System.out.println(textDesxifrat + " text descifrat");
+        System.out.println("Xifrat");
+        System.out.println("--------");
+        for (String text : textos) {
+            System.out.println(text + " => " + xifraRot13(text));
+            
+        }
+
+        System.out.println(" ");
+        System.out.println("Desxifrat");
+        System.out.println("--------");
+        for (String text : textos) {
+            String textXifrat = xifraRot13(text);
+            System.out.println(textXifrat + " => " + desxifraRot13(textXifrat));
+        }
     }
 
     public static String xifraRot13(String text) {
